@@ -1,0 +1,34 @@
+extends layout 
+ 
+block content 
+  h1= title 
+ 
+  form(id='umbrellaForm', action="/resource/umbrellas", method="POST") 
+    div.form-group 
+        label.umbrellaAttr(for='umbrella_type') umbrella type 
+        input#umbrella_type(type='text', name='umbrella_type') 
+    div.form-group 
+        label.umbrellaAttr(for='color') umbrella color 
+        input#color(type='text', name='color') 
+    div.form-group 
+        label.umbrellaAttr(for='cost') umbrella cost 
+        input#cost(type='number', name='cost') 
+    input(type="submit") 
+ 
+  script. 
+    document.forms['umbrellaForm'].addEventListener('submit', (event) => { 
+      event.preventDefault(); 
+      // TODO do something here to show user that form is being submitted 
+      fetch(event.target.action, { 
+        method: 'POST', 
+        body: new URLSearchParams(new FormData(event.target)) // event.target is the form 
+      }).then((resp) => { 
+        return resp.json(); // or resp.text() or whatever the server sends 
+      }).then((body) => { 
+        alert("Save succeded") 
+        // TODO handle body 
+      }).catch((error) => { 
+        // TODO handle error 
+        alert("Save failed " + error ) 
+      }); 
+    }); 

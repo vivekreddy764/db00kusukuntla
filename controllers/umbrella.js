@@ -35,14 +35,21 @@ exports.umbrella_detail = function(req, res) {
 }; 
  
 
- 
-// Handle umbrella delete form on DELETE. 
-exports.umbrella_delete = function(req, res) { 
-    res.send('NOT IMPLEMENTED: umbrella delete DELETE ' + req.params.id); 
-}; 
+// Handle umbrella delete on DELETE. 
+exports.umbrella_delete = async function(req, res) { 
+    console.log("delete "  + req.params.id) 
+    try { 
+        result = await umbrella.findByIdAndDelete( req.params.id) 
+        console.log("Removed " + result) 
+        res.send(result) 
+    } catch (err) { 
+        res.status(500) 
+        res.send(`{"error": Error deleting ${err}}`); 
+    } 
+};
  
 
-// Handle Costume update form on PUT. 
+// Handle umbrella update form on PUT. 
 exports.umbrella_update_put = async function(req, res) { 
     console.log(`update on id ${req.params.id} with body 
 ${JSON.stringify(req.body)}`) 
@@ -63,11 +70,12 @@ failed`);
     } 
 }; 
 
+
 // Handle umbrella create on POST. 
 exports.umbrella_create_post = async function(req, res) { 
     console.log(req.body) 
     let document = new umbrella(); 
-    // We are looking for a body, since POST does not have query parameters. 
+    // We are looking for a body, since POST does not have params parameters. 
     // Even though bodies can be in many different formats, we will be picky 
     // and require that it be a json object 
     // {"umbrella_type":"fan umbrella", "color":"blue", "cost":23} 
@@ -95,3 +103,61 @@ exports.umbrella_detail = async function(req, res) {
         res.send(`{"error": document for id ${req.params.id} not found`); 
     } 
 }; 
+
+ // Handle a show one view with id specified by params 
+ exports.umbrella_view_one_Page = async function(req, res) { 
+    console.log("single view for id "  + req.query.id) 
+    try{ 
+        result = await umbrella.findById( req.query.id) 
+        res.render('umbrelladetail',  
+{ title: 'umbrella Detail', toShow: result }); 
+    } 
+    catch(err){ 
+        res.status(500) 
+        res.send(`{'error': '${err}'}`); 
+    } 
+};
+
+ // Handle building the view for creating a umbrella. 
+// No body, no in path parameter, no query. 
+// Does not need to be async 
+exports.umbrella_create_Page =  function(req, res) { 
+    console.log("create view") 
+    try{ 
+        res.render('umbrellacreate', { title: 'umbrella Create'}); 
+    } 
+    catch(err){ 
+        res.status(500) 
+        res.send(`{'error': '${err}'}`); 
+    } 
+}; 
+
+// Handle building the view for updating a umbrella. 
+// query provides the id 
+exports.umbrella_update_Page =  async function(req, res) { 
+    console.log("update view for item "+req.query.id) 
+    try{ 
+        let result = await umbrella.findById(req.query.id) 
+        res.render('umbrellaupdate', { title: 'umbrella Update', toShow: result }); 
+    } 
+    catch(err){ 
+        res.status(500) 
+        res.send(`{'error': '${err}'}`); 
+    } 
+}; 
+
+// Handle a delete one view with id from query 
+exports.umbrella_delete_Page = async function(req, res) { 
+    console.log("Delete view for id "  + req.query.id) 
+    try{ 
+        result = await umbrella.findById(req.query.id) 
+        res.render('umbrelladelete', { title: 'umbrella Delete', toShow: 
+result }); 
+    } 
+    catch(err){ 
+        res.status(500) 
+        res.send(`{'error': '${err}'}`); 
+    } 
+}; 
+
+

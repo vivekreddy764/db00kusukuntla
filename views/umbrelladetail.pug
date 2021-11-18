@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1= title
+
+    - let umbrellaid = toShow._id
+    - let umbrella_type = toShow.umbrella_type
+    - let umbrellaColor = toShow.color
+    - let umbrellaCost = toShow.cost
+    div
+      div.row
+        div(class='umbrellaAttr mr-3') umbrella ID is:
+        div #{umbrellaid}
+      div.row
+        div(class='umbrellaAttr mr-3') umbrella Type is:
+        div #{umbrella_type}
+      div.row
+        div(class='umbrellaAttr mr-3') umbrella Color is:
+        div #{umbrellaColor}
+      div.row
+        div(class='umbrellaAttr mr-3') umbrella Cost is:
+        div #{umbrellaCost}
