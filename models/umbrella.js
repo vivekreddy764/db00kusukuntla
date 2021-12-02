@@ -4,5 +4,7 @@ umbrella_type: String,
 color: String, 
 cost: Number 
 }) 
- 
+
+
 module.exports = mongoose.model("umbrella",umbrellaSchema) 
+
